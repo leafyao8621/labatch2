@@ -1,5 +1,6 @@
 #include <gtk/gtk.h>
 #include <stdio.h>
+#include "../backend/Lab2data.h"
 
 static void run(GtkWidget* this, gpointer e) {
     GtkGrid* grid = (GtkGrid*)e;
@@ -9,16 +10,16 @@ static void run(GtkWidget* this, gpointer e) {
     FILE* ifs = fopen(ifn, "r");
     FILE* ofs = fopen(ofn, "w");
     FILE* cfs = fopen(cfn, "r");
-    char b[80];
-    fscanf(ifs, "%s", b);
-    fputs("test", ofs);
-    fputs(b, ofs);
-    char b1[80];
-    fscanf(cfs, "%s", b1);
-    fputs(b1, ofs);
+    int t, s_num, rule, l_upper, screen;
+    double beta, delta;
+    fscanf(cfs, "%d\n%d\n%lf\n%d\n%lf\n%d\n%d\n", &t, &s_num, &delta, &rule,
+                                                  &beta, &l_upper, &screen);
+    fclose(cfs);
+    double data[s_num];
+    int stat = batch_means(ifs, ofs, t, s_num, data, delta, rule, beta, l_upper, screen);
     fclose(ifs);
     fclose(ofs);
-    fclose(cfs);
+    printf("stat %d\n", stat);
 }
 
 static void activate(GtkApplication* app, gpointer user_data) {
